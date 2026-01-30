@@ -26,9 +26,37 @@
 
 যোৱা দুদিনত মই মোৰ একাউণ্টতে সৃষ্ট বটেৰে এই ক'ড চলাই চাইছোঁ, কেইটামান ভুলৰ বাদে প্ৰায় ঠিকেই সাঁচ যোগ সম্পন্ন হৈছে।
 
+# About the folder structure
 
+The python script also expects two files called user-password.cfg that includes login details for the bot, and user-config.py that specifies the Wikimedia family, language and main account details.
 
+They have NOT been included here for security.
 
+The format looks like this:
 
+## user-config.py
 
+#-*- coding: utf-8 -*-
 
+from collections import defaultdict
+
+family = "wikipedia"
+mylang = "as"
+
+#Pywikibot v10 expects a defaultdict
+password_file = "user-password.cfg"
+usernames = defaultdict(dict)
+usernames["wikipedia"]["as"] = "main user name"
+usernames["wikipedia"]["en"] = "main user name"
+usernames["wikipedia"]["wikidata"] = "main user name"
+
+put_throttle = 5
+minthrottle = 0
+
+cosmetic_changes = False
+
+console_encoding = "utf-8"
+
+## user-password.cfg
+
+('as', 'wikipedia', 'main user name', BotPassword('bot name', 'bot secret'))
