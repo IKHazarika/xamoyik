@@ -28,6 +28,8 @@
 
 # About the folder structure
 
+If cloned to run on PC, requires the creation of a .venv. Not included here for security.
+
 The python script also expects two files called user-password.cfg that includes login details for the bot, and user-config.py that specifies the Wikimedia family, language and main account details.
 
 They have NOT been included here for security.
@@ -60,3 +62,4 @@ console_encoding = "utf-8"
 ## user-password.cfg
 
 ('as', 'wikipedia', 'main user name', BotPassword('bot name', 'bot secret'))
+
