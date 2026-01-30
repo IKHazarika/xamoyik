@@ -1,0 +1,170 @@
+# Time-sensitivity triggers for Assamese Wikipedia tagging bot
+# Philosophy:
+# - Prefer high-precision triggers over high-recall.
+# - Avoid triggers that would tag historical biographies or timeless topics.
+# - Use Wikidata only when we are confident; otherwise rely on enwiki infobox/category signals.
+
+aswiki:
+  # Assamese categories: exact match only (high precision).
+  # These are meant to catch obvious time-sensitive articles when Wikidata is missing.
+  category_exact:
+    # Biographies
+    - "জীৱিত ব্যক্তি"          # living people
+
+    # Places (demographics, governance, infrastructure change)
+    - "দেশ"
+    - "ভাৰতৰ ৰাজ্য"            # if exists; adjust to your category system
+    - "ৰাজ্য"
+    - "জিলা"
+    - "চহৰ"
+    - "গাঁও"
+    - "নগৰ"
+    - "পৌৰসভা"
+
+    # Organizations / institutions
+    - "বিশ্ববিদ্যালয়"
+    - "বিদ্যালয়"
+    - "হাসপাতাল"
+
+    # Economy / firms
+    - "কোম্পানী"
+    - "ব্যাংক"
+
+    # Politics
+    - "ৰাজনৈতিক দল"
+
+    # Sports
+    - "ক্ৰীড়া দল"              # if exists; adjust
+    - "ফুটবল ক্লাব"            # if exists; adjust
+
+  # Assamese templates: exact match only (high precision).
+  # Put only templates that *strongly* imply time-sensitive content.
+  template_exact:
+    # A true "living person" / BLP marker if you use one
+    - "জীৱিত ব্যক্তি"
+
+    # If Assamese Wikipedia uses infoboxes, these can help.
+    # Keep these only if they exist on aswiki; otherwise remove.
+    - "দেশ"            # infobox country (example—adjust)
+    - "চহৰ"            # infobox settlement/city (example—adjust)
+    - "কোম্পানী"        # infobox company (example—adjust)
+    - "বিশ্ববিদ্যালয়"   # infobox university (example—adjust)
+
+wikidata:
+  # IMPORTANT CHANGE vs your old file:
+  # - We DO NOT include Q5 (human) here, because that tags historical figures.
+  # - Instead we use living_human_rule for living humans only.
+  #
+  # Keep this list minimal and only for entity-types that are inherently time-sensitive.
+  # (Countries/settlements/orgs/companies/universities typically change over time.)
+  p31_qids:
+    - "Q6256"   # country
+    - "Q515"    # city
+    - "Q783794" # company
+    - "Q3918"   # university
+
+  # If true: tag humans ONLY if they appear living
+  # (human + no death date in Wikidata).
+  living_human_rule: true
+
+enwiki:
+  # English categories: exact match only where possible.
+  # Avoid broad categories like "Countries" (too messy on enwiki),
+  # and avoid any birth/death-year category logic.
+  category_exact:
+    # Living people (core)
+    - "Living people"
+
+    # Ongoing / current events (rare but strongly time-sensitive)
+    - "Ongoing military conflicts"
+    - "Ongoing conflicts"
+    - "Current wars"
+    - "Active insurgencies"
+
+  # English category prefixes: keep only those that strongly indicate a continuously-updating topic.
+  # DO NOT include "202" or year prefixes (those tag historical people).
+  category_prefix:
+    - "Elections in "
+    - "Ongoing "
+
+  # English templates: exact match only (high precision).
+  # This is the main way to infer time-sensitive topics when aswiki lacks categories.
+  template_exact:
+
+    # Places (demographics etc.)
+    - "Infobox country"
+    - "Infobox settlement"
+    - "Infobox administrative division"
+
+    # Organizations / institutions
+    - "Infobox university"
+    - "Infobox school"
+    - "Infobox hospital"
+    - "Infobox government agency"
+
+    # Firms / economy
+    - "Infobox company"
+    - "Infobox bank"
+    - "Infobox airline"
+
+    # Politics / elections
+    - "Infobox political party"
+
+    # Sports teams (rosters, seasons)
+    - "Infobox sports team"
+    - "Infobox football club"
+
+  # (Optional but safe) keep present so code never surprises you
+  template_prefix: []
+
+# --- NEW (minimal): body-text keyword triggers ---
+# These fire ONLY when your code checks keywords (aswiki body first; then enwiki body if linked).
+keywords:
+  aswiki:
+    # Assamese (script)
+    - "জনসংখ্যা"
+    - "জনসংখ্যাৰ"
+    - "মুঠ ঘৰুৱা উৎপাদন"
+    - "মুঠ ঘৰুৱা উৎপাদন (GDP)"
+    - "জিডিপি"
+    - "প্ৰতি ব্যক্তি আয়"
+    - "প্ৰতি ব্যক্তি আয়"
+
+    # Roman/English terms that might appear inside Assamese articles
+    - "GDP"
+    - "gdp"
+    - "per capita"
+    - "per-capita"
+    - "per capita income"
+    - "GDP per capita"
+    - "population"
+
+  enwiki:
+    - "population"
+    - "GDP"
+    - "gdp"
+    - "per capita"
+    - "per-capita"
+    - "per capita income"
+    - "GDP per capita"
+    - "poverty rate"
+    - "unemployment rate"
+    - "rate of unemployment"
+    - "inflation"
+    - "life expectancy"
+    - "gross enrolment"
+    - "literacy rate"
+    - "rate of literacy"
+    - "rate of poverty"
+    - "gross domestic product"
+    - "national income"
+    - "employment rate"
+    - "rate of employment"
+    - "participation rate"
+    - "rate of participation"
+    - "rate of absolute poverty"
+    - "growth rate"
+    - "rate of growth"
+
+# This is what will be written into the TEMPLATE reason= field (Assamese, human-readable)
+keyword_reason_as: "আৰ্থ-সামাজিক পৰিসংখ্যাৰ উপস্থিতি"
